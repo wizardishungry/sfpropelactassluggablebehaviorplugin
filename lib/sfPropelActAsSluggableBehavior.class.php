@@ -63,10 +63,21 @@ class sfPropelActAsSluggableBehavior
     $slug = sfPropelActAsSluggableBehaviorUtils::stripText($node->$getter(), $separator);
     $ret  = $slug;
     $i = 0;
+
+    $conf_scope = sprintf('propel_behavior_sfPropelActAsSluggableBehavior_%s_scope', $node_class);
+    $scope = sfConfig::has($conf_scope) ? sfConfig::get($conf_scope) : Array();
+    $scope_criteria = new Criteria();
+
+    foreach($scope as $column)
+    {
+        $getter='get'.call_user_func(array($peer_name,'translateFieldName'),
+            $column,BasePeer::TYPE_COLNAME,BasePeer::TYPE_PHPNAME);
+        $scope_criteria->add($column,$node->$getter());
+    }
     
     while(1)
     {   
-      $c = new Criteria();
+      $c = clone $scope_criteria;
       $c->add($column, $ret);
       $entry = call_user_func(array($peer_name, 'doSelectOne'), $c);
     
