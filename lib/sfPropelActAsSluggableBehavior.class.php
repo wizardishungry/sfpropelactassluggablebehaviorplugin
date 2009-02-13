@@ -68,7 +68,7 @@ class sfPropelActAsSluggableBehavior
     $scope = sfConfig::has($conf_scope) ? sfConfig::get($conf_scope) : Array();
     $scope_criteria = new Criteria();
 
-    foreach($scope as $column)
+    foreach($scope as $my_col)
     {
         $getter='get'.call_user_func(array($peer_name,'translateFieldName'),
             $column,BasePeer::TYPE_COLNAME,BasePeer::TYPE_PHPNAME);
